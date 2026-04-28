@@ -46,10 +46,9 @@
             cursor: pointer;
         }
 
-        /* 🎯 Row highlight styles */
-        .win { background: #14532d; }     /* green */
-        .lose { background: #7f1d1d; }    /* red */
-        .draw { background: #78350f; }    /* yellow */
+        .win { background: #14532d; }
+        .lose { background: #7f1d1d; }
+        .draw { background: #78350f; }
 
         #result {
             margin-top: 15px;
@@ -90,26 +89,26 @@
 <script>
     const subjects = ["Tamil","English","Maths","Physics","DPCO","OOPS","BEEE"];
 
-    // create table
+    // 🔥 Create table with Physics pre-filled
     for (let i = 0; i < subjects.length; i++) {
 
-    let yVal = "";
-    let fVal = "";
+        let yVal = "";
+        let fVal = "";
 
-    // 👉 Physics is index 3
-    if (i === 3) {
-        yVal = 49;  // HEAM
-        fVal = 48;  // LP
+        // Physics index = 3
+        if (i === 3) {
+            yVal = 49;
+            fVal = 48;
+        }
+
+        document.getElementById("tableBody").innerHTML += `
+            <tr id="row${i}">
+                <td>${subjects[i]}</td>
+                <td><input type="number" id="y${i}" value="${yVal}"></td>
+                <td><input type="number" id="f${i}" value="${fVal}"></td>
+            </tr>
+        `;
     }
-
-    document.getElementById("tableBody").innerHTML += `
-        <tr id="row${i}">
-            <td>${subjects[i]}</td>
-            <td><input type="number" id="y${i}" value="${yVal}"></td>
-            <td><input type="number" id="f${i}" value="${fVal}"></td>
-        </tr>
-    `;
-}}
 
     function calculate() {
         let t1 = 0, t2 = 0;
@@ -122,7 +121,6 @@
             let fVal = document.getElementById("f"+i).value;
             let row = document.getElementById("row"+i);
 
-            // reset colors
             row.classList.remove("win","lose","draw");
 
             if (yVal === "" || fVal === "") {
