@@ -59,13 +59,17 @@
             margin-top: 10px;
         }
 
+        /* ✅ FIXED WARNING BOX */
         #bottomWarning {
-            margin-top: 25px;
-            padding: 10px;
+            margin: 25px auto;
+            padding: 12px 20px;
             background: #7f1d1d;
-            border-radius: 8px;
-            display: inline-block;
+            border-radius: 10px;
             font-weight: bold;
+            color: #fff;
+            width: fit-content;
+            max-width: 90%;
+            display: none;
         }
 
         .winnerGlow {
@@ -142,10 +146,8 @@
 <div id="diff"></div>
 <div id="subjectScore"></div>
 
-<!-- ✅ Bottom warning -->
 <div id="bottomWarning"></div>
 
-<!-- 🎮 Overlay -->
 <div id="overlay">
     <div id="overlayText"></div>
     <button onclick="closeOverlay()">Close</button>
@@ -182,7 +184,11 @@
         let msg = "⚠️ Marks are not filled fully, so calculation is not possible";
 
         document.getElementById("warning").innerText = "";
-        document.getElementById("bottomWarning").innerText = "";
+
+        let bw = document.getElementById("bottomWarning");
+        bw.innerText = "";
+        bw.style.display = "none";
+
         let resultDiv = document.getElementById("result");
         resultDiv.classList.remove("winnerGlow");
 
@@ -198,7 +204,8 @@
 
             if (yVal === "" || fVal === "") {
                 document.getElementById("warning").innerText = msg;
-                document.getElementById("bottomWarning").innerText = msg;
+                bw.innerText = msg;
+                bw.style.display = "block";
                 return;
             }
 
@@ -224,17 +231,8 @@
             }
         }
 
-        let winner = "";
-
-        if (t1 > t2) {
-            winner = "🏆 HEAM WINS!";
-        } 
-        else if (t2 > t1) {
-            winner = "🏆 LP WINS!";
-        } 
-        else {
-            winner = "🤝 DRAW!";
-        }
+        let winner = t1 > t2 ? "🏆 HEAM WINS!" :
+                     t2 > t1 ? "🏆 LP WINS!" : "🤝 DRAW!";
 
         resultDiv.innerText = winner;
         resultDiv.classList.add("winnerGlow");
@@ -252,10 +250,7 @@
     function animateCell(input, color) {
         input.style.background = color;
         input.classList.add("pulse");
-
-        setTimeout(() => {
-            input.classList.remove("pulse");
-        }, 500);
+        setTimeout(() => input.classList.remove("pulse"), 500);
     }
 
     function showOverlay(text) {
