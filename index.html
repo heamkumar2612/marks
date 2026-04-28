@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Marks Battle</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #0f172a;
+            color: white;
+            text-align: center;
+        }
+
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        th, td {
+            border: 1px solid #334155;
+            padding: 10px;
+        }
+
+        th {
+            background: #1e293b;
+        }
+
+        input {
+            width: 60px;
+            padding: 5px;
+            text-align: center;
+            border-radius: 5px;
+            border: none;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 25px;
+            background: #22c55e;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* 🎯 Row highlight styles */
+        .win { background: #14532d; }     /* green */
+        .lose { background: #7f1d1d; }    /* red */
+        .draw { background: #78350f; }    /* yellow */
+
+        #result {
+            margin-top: 15px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        #warning {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>🔥 Marks Battle 🔥</h1>
+<h2>Kumar VS Arjun</h2>
+
+<table>
+    <tr>
+        <th>Subject</th>
+        <th>Kumar</th>
+        <th>Arjun</th>
+    </tr>
+    <tbody id="tableBody"></tbody>
+</table>
+
+<button onclick="calculate()">Calculate</button>
+
+<div id="warning"></div>
+<div id="result"></div>
+<div id="diff"></div>
+<div id="subjectScore"></div>
+
+<audio id="winSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
+
+<script>
+    const subjects = ["Tamil","English","Maths","Physics","DPCO","OOPS","BEEE"];
+
+    // create table
+    for (let i = 0; i < subjects.length; i++) {
+        document.getElementById("tableBody").innerHTML += `
+            <tr id="row${i}">
+                <td>${subjects[i]}</td>
+                <td><input type="number" id="y${i}"></td>
+                <td><input type="number" id="f${i}"></td>
+            </tr>
+        `;
+    }
+
+    function calculate() {
+        let t1 = 0, t2 = 0;
+        let score1 = 0, score2 = 0;
+
+        document.getElementById("warning").innerText = "";
+
+        for (let i = 0; i < subjects.length; i++) {
+            let yVal = document.getElementById("y"+i).value;
+            let fVal = document.getElementById("f"+i).value;
+            let row = document.getElementById("row"+i);
+
+            // reset colors
+            row.classList.remove("win","lose","draw");
+
+            if (yVal === "" || fVal === "") {
+                document.getElementById("warning").innerText =
+                    "⚠️ Enter all marks before calculating!";
+                return;
+            }
+
+            let y = Number(yVal);
+            let f = Number(fVal);
+
+            t1 += y;
+            t2 += f;
+
+            if (y > f) {
+                score1++;
+                row.classList.add("win");
+            }
+            else if (f > y) {
+                score2++;
+                row.classList.add("lose");
+            }
+            else {
+                row.classList.add("draw");
+            }
+        }
+
+        let diff = Math.abs(t1 - t2);
+
+        let resultText = "";
+
+        if (t1 > t2) {
+            resultText = "🏆 Kumar Wins!";
+            document.getElementById("winSound").play();
+        } 
+        else if (t2 > t1) {
+            resultText = "🏆 Arjun Wins!";
+            document.getElementById("winSound").play();
+        } 
+        else {
+            resultText = "🤝 Draw!";
+        }
+
+        document.getElementById("result").innerText = resultText;
+        document.getElementById("diff").innerText = "Difference: " + diff + " marks";
+        document.getElementById("subjectScore").innerText =
+            `Subject Score → Kumar: ${score1} | Arjun: ${score2}`;
+    }
+</script>
+
+</body>
+</html>
