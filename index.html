@@ -55,11 +55,19 @@
         }
 
         #warning {
-            color: red;
+            color: #f87171;
             margin-top: 10px;
         }
 
-        /* 🏆 Glow */
+        #bottomWarning {
+            margin-top: 25px;
+            padding: 10px;
+            background: #7f1d1d;
+            border-radius: 8px;
+            display: inline-block;
+            font-weight: bold;
+        }
+
         .winnerGlow {
             animation: glow 1s infinite alternate;
             color: #22c55e;
@@ -70,7 +78,6 @@
             to { text-shadow: 0 0 25px #22c55e, 0 0 40px #22c55e; }
         }
 
-        /* 💥 Pulse animation */
         .pulse {
             animation: pulseAnim 0.5s ease;
         }
@@ -81,7 +88,6 @@
             100% { transform: scale(1); }
         }
 
-        /* 🎮 FULL SCREEN WINNER */
         #overlay {
             position: fixed;
             top: 0;
@@ -136,7 +142,10 @@
 <div id="diff"></div>
 <div id="subjectScore"></div>
 
-<!-- 🎮 FULL SCREEN OVERLAY -->
+<!-- ✅ Bottom warning -->
+<div id="bottomWarning"></div>
+
+<!-- 🎮 Overlay -->
 <div id="overlay">
     <div id="overlayText"></div>
     <button onclick="closeOverlay()">Close</button>
@@ -147,13 +156,12 @@
 <script>
     const subjects = ["Tamil","English","Maths","Physics","DPCO","OOPS","BEEE"];
 
-    // create table
     for (let i = 0; i < subjects.length; i++) {
 
         let yVal = "";
         let fVal = "";
 
-        if (i === 3) { // Physics
+        if (i === 3) {
             yVal = 49;
             fVal = 48;
         }
@@ -171,7 +179,10 @@
         let t1 = 0, t2 = 0;
         let score1 = 0, score2 = 0;
 
+        let msg = "⚠️ Marks are not filled fully, so calculation is not possible";
+
         document.getElementById("warning").innerText = "";
+        document.getElementById("bottomWarning").innerText = "";
         let resultDiv = document.getElementById("result");
         resultDiv.classList.remove("winnerGlow");
 
@@ -182,13 +193,12 @@
             let yVal = yInput.value;
             let fVal = fInput.value;
 
-            // reset
             yInput.style.background = "white";
             fInput.style.background = "white";
 
             if (yVal === "" || fVal === "") {
-                document.getElementById("warning").innerText =
-                    "⚠️ Enter all marks!";
+                document.getElementById("warning").innerText = msg;
+                document.getElementById("bottomWarning").innerText = msg;
                 return;
             }
 
@@ -235,10 +245,7 @@
         document.getElementById("subjectScore").innerText =
             `Subject Score → HEAM: ${score1} | LP: ${score2}`;
 
-        // 🔊 sound
         document.getElementById("winSound").play();
-
-        // 🎮 show overlay
         showOverlay(winner);
     }
 
