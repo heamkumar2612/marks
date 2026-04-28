@@ -92,14 +92,24 @@
 
     // create table
     for (let i = 0; i < subjects.length; i++) {
-        document.getElementById("tableBody").innerHTML += `
-            <tr id="row${i}">
-                <td>${subjects[i]}</td>
-                <td><input type="number" id="y${i}"></td>
-                <td><input type="number" id="f${i}"></td>
-            </tr>
-        `;
+
+    let yVal = "";
+    let fVal = "";
+
+    // 👉 Physics is index 3
+    if (i === 3) {
+        yVal = 49;  // HEAM
+        fVal = 48;  // LP
     }
+
+    document.getElementById("tableBody").innerHTML += `
+        <tr id="row${i}">
+            <td>${subjects[i]}</td>
+            <td><input type="number" id="y${i}" value="${yVal}"></td>
+            <td><input type="number" id="f${i}" value="${fVal}"></td>
+        </tr>
+    `;
+}}
 
     function calculate() {
         let t1 = 0, t2 = 0;
