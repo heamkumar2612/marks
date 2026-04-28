@@ -67,13 +67,13 @@
 <body>
 
 <h1>🔥 Marks Battle 🔥</h1>
-<h2>Kumar VS Arjun</h2>
+<h2>HEAM VS LP</h2>
 
 <table>
     <tr>
         <th>Subject</th>
-        <th>Kumar</th>
-        <th>Arjun</th>
+        <th>HEAM</th>
+        <th>LP</th>
     </tr>
     <tbody id="tableBody"></tbody>
 </table>
@@ -145,11 +145,11 @@
         let resultText = "";
 
         if (t1 > t2) {
-            resultText = "🏆 Kumar Wins!";
+            resultText = "🏆 HEAM Wins!";
             document.getElementById("winSound").play();
         } 
         else if (t2 > t1) {
-            resultText = "🏆 Arjun Wins!";
+            resultText = "🏆 LP Wins!";
             document.getElementById("winSound").play();
         } 
         else {
@@ -159,7 +159,7 @@
         document.getElementById("result").innerText = resultText;
         document.getElementById("diff").innerText = "Difference: " + diff + " marks";
         document.getElementById("subjectScore").innerText =
-            `Subject Score → Kumar: ${score1} | Arjun: ${score2}`;
+            `Subject Score → HEAM: ${score1} | LP: ${score2}`;
     }
 </script>
 
