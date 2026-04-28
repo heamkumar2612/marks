@@ -54,22 +54,20 @@
             font-weight: bold;
         }
 
-        #warning {
-            color: #f87171;
-            margin-top: 10px;
-        }
-
-        /* ✅ FIXED WARNING BOX */
-        #bottomWarning {
-            margin: 25px auto;
+        .bottomWarning {
+            margin: 15px auto;
             padding: 12px 20px;
             background: #7f1d1d;
             border-radius: 10px;
             font-weight: bold;
             color: #fff;
             width: fit-content;
-            max-width: 90%;
-            
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .winnerGlow {
@@ -91,37 +89,6 @@
             50% { transform: scale(1.2); }
             100% { transform: scale(1); }
         }
-
-        #overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.95);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            z-index: 999;
-        }
-
-        #overlayText {
-            font-size: 40px;
-            font-weight: bold;
-            color: #22c55e;
-            animation: glow 1s infinite alternate;
-        }
-
-        #overlay button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: white;
-            color: black;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-        }
     </style>
 </head>
 
@@ -141,25 +108,17 @@
 
 <button onclick="calculate()">Calculate</button>
 
-<div id="warning"></div>
+<!-- Warning appears right below the button -->
+<div id="bottomContainer"></div>
+
 <div id="result"></div>
 <div id="diff"></div>
 <div id="subjectScore"></div>
-
-<div id="bottomWarning"></div>
-
-<div id="overlay">
-    <div id="overlayText"></div>
-    <button onclick="closeOverlay()">Close</button>
-</div>
-
-<audio id="winSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
 
 <script>
     const subjects = ["Tamil","English","Maths","Physics","DPCO","OOPS","BEEE"];
 
     for (let i = 0; i < subjects.length; i++) {
-
         let yVal = "";
         let fVal = "";
 
@@ -177,40 +136,32 @@
         `;
     }
 
+    function showError(msg) {
+        const container = document.getElementById("bottomContainer");
+        container.innerHTML = `<div class="bottomWarning">${msg}</div>`;
+    }
+
+    function clearError() {
+        document.getElementById("bottomContainer").innerHTML = "";
+    }
+
     function calculate() {
         let t1 = 0, t2 = 0;
         let score1 = 0, score2 = 0;
 
-        let msg = "⚠️ Marks are not filled fully, so calculation is not possible";
-
-        document.getElementById("warning").innerText = "";
-
-        let bw = document.getElementById("bottomWarning");
-        bw.innerText = "";
-        bw.style.display = "none";
-
-        let resultDiv = document.getElementById("result");
-        resultDiv.classList.remove("winnerGlow");
+        clearError();
 
         for (let i = 0; i < subjects.length; i++) {
             let yInput = document.getElementById("y"+i);
             let fInput = document.getElementById("f"+i);
 
-            let yVal = yInput.value;
-            let fVal = fInput.value;
-
-            yInput.style.background = "white";
-            fInput.style.background = "white";
-
-            if (yVal === "" || fVal === "") {
-                document.getElementById("warning").innerText = msg;
-                bw.innerText = msg;
-                bw.style.display = "block";
+            if (yInput.value === "" || fInput.value === "") {
+                showError("⚠️ Marks are not filled fully, so calculation is not possible");
                 return;
             }
 
-            let y = Number(yVal);
-            let f = Number(fVal);
+            let y = Number(yInput.value);
+            let f = Number(fInput.value);
 
             t1 += y;
             t2 += f;
@@ -219,13 +170,11 @@
                 score1++;
                 animateCell(yInput, "#22c55e");
                 animateCell(fInput, "#ef4444");
-            }
-            else if (f > y) {
+            } else if (f > y) {
                 score2++;
                 animateCell(fInput, "#22c55e");
                 animateCell(yInput, "#ef4444");
-            }
-            else {
+            } else {
                 animateCell(yInput, "#facc15");
                 animateCell(fInput, "#facc15");
             }
@@ -234,32 +183,20 @@
         let winner = t1 > t2 ? "🏆 HEAM WINS!" :
                      t2 > t1 ? "🏆 LP WINS!" : "🤝 DRAW!";
 
-        resultDiv.innerText = winner;
-        resultDiv.classList.add("winnerGlow");
+        document.getElementById("result").innerText = winner;
+        document.getElementById("result").classList.add("winnerGlow");
 
         document.getElementById("diff").innerText =
             "Difference: " + Math.abs(t1 - t2);
 
         document.getElementById("subjectScore").innerText =
             `Subject Score → HEAM: ${score1} | LP: ${score2}`;
-
-        document.getElementById("winSound").play();
-        showOverlay(winner);
     }
 
     function animateCell(input, color) {
         input.style.background = color;
         input.classList.add("pulse");
         setTimeout(() => input.classList.remove("pulse"), 500);
-    }
-
-    function showOverlay(text) {
-        document.getElementById("overlayText").innerText = text;
-        document.getElementById("overlay").style.display = "flex";
-    }
-
-    function closeOverlay() {
-        document.getElementById("overlay").style.display = "none";
     }
 </script>
 
