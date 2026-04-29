@@ -55,19 +55,13 @@
         }
 
         .bottomWarning {
-            margin: 15px auto;
+            margin: 25px auto;
             padding: 12px 20px;
             background: #7f1d1d;
             border-radius: 10px;
             font-weight: bold;
             color: #fff;
             width: fit-content;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .winnerGlow {
@@ -108,12 +102,11 @@
 
 <button onclick="calculate()">Calculate</button>
 
-<!-- Warning appears right below the button -->
-<div id="bottomContainer"></div>
-
 <div id="result"></div>
 <div id="diff"></div>
 <div id="subjectScore"></div>
+
+<div id="bottomContainer"></div>
 
 <script>
     const subjects = ["Tamil","English","Maths","Physics","DPCO","OOPS","BEEE"];
@@ -122,9 +115,16 @@
         let yVal = "";
         let fVal = "";
 
+        // ✅ Physics
         if (i === 3) {
             yVal = 49;
             fVal = 48;
+        }
+
+        // ✅ DPCO
+        if (i === 4) {
+            yVal = 50;
+            fVal = 40;
         }
 
         document.getElementById("tableBody").innerHTML += `
@@ -136,27 +136,21 @@
         `;
     }
 
-    function showError(msg) {
-        const container = document.getElementById("bottomContainer");
-        container.innerHTML = `<div class="bottomWarning">${msg}</div>`;
-    }
-
-    function clearError() {
-        document.getElementById("bottomContainer").innerHTML = "";
-    }
-
     function calculate() {
         let t1 = 0, t2 = 0;
         let score1 = 0, score2 = 0;
 
-        clearError();
+        let msg = "⚠️ Marks are not filled fully, so calculation is not possible";
+
+        document.getElementById("bottomContainer").innerHTML = "";
 
         for (let i = 0; i < subjects.length; i++) {
             let yInput = document.getElementById("y"+i);
             let fInput = document.getElementById("f"+i);
 
             if (yInput.value === "" || fInput.value === "") {
-                showError("⚠️ Marks are not filled fully, so calculation is not possible");
+                document.getElementById("bottomContainer").innerHTML =
+                    `<div class="bottomWarning">${msg}</div>`;
                 return;
             }
 
